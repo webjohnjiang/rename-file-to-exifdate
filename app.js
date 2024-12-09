@@ -3,16 +3,12 @@ const fs = require('fs')
 const dayjs = require('dayjs')
 const path = require('path')
 
-const ep = new exiftool.ExiftoolProcess()
-
-const baseDir = 'E:\\重要资料导入备份\\icloud照片备份20240623\\iCloud 照片 (3)\\iCloud 照片'
-
-ep
-  .open()
+exports.renameOneDir = function(baseDir) {
+  const ep = new exiftool.ExiftoolProcess()
+  ep.open()
   // read directory
   .then(() => ep.readMetadata(baseDir, ['-File:all']))
   .then(function(res) {
-    console.log('读取ok', res)
     const exifInfos = res?.data
     for (let item of exifInfos) {
       // 找到可用的日期
@@ -37,4 +33,6 @@ ep
   .catch(function(err) {
     console.log('close occur error')
     console.error(err)
+    ep.close()
   })
+}
